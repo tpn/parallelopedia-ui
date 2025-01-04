@@ -3,7 +3,7 @@ import { Container, Form, FormControl } from 'react-bootstrap';
 
 const Wiki = () => {
     return (
-        <Container>
+        <Container className="wiki-search-container">
             <Form>
                 <FormControl
                     type="search"
