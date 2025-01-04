@@ -29,6 +29,7 @@ const Wiki = () => {
 
     if (value.trim().length >= 3) {
       searchTimeout = setTimeout(() => {
+        const startTime = performance.now();
         abortControllerRef.current = new AbortController();
         const { signal } = abortControllerRef.current;
         try {
@@ -39,7 +40,9 @@ const Wiki = () => {
             .then((response) => response.json())
             .then((data) => {
               setResults(data);
-              setSearchStatus(`Received ${data.length} results for '${value}'...`);
+              const endTime = performance.now();
+              const duration = ((endTime - startTime) / 1000).toFixed(2);
+              setSearchStatus(`Received ${data.length} results for '${value}' in ${duration} seconds.`);
             })
             .catch((error) => {
               if (error.name !== "AbortError") {
