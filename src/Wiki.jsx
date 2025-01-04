@@ -45,7 +45,9 @@ const Wiki = () => {
         setResults(data);
         const endTime = performance.now();
         const duration = ((endTime - startTime) / 1000).toFixed(2);
-        setSearchStatus(`Received ${data.length} results for '${query}' in ${duration} seconds.`);
+        setSearchStatus(
+          `Received ${data.length} results for '${query}' in ${duration} seconds.`
+        );
       } catch (error) {
         if (error.name !== "AbortError") {
           console.error("Error fetching search results:", error);
@@ -93,22 +95,19 @@ const Wiki = () => {
       </Form>
 
       {query && (
-        <div className="search-status mt-2 text-muted">
-          {searchStatus}
-        </div>
+        <div className="search-status mt-2 text-muted">{searchStatus}</div>
       )}
-        <ListGroup className="mt-3">
-          {results.map(([name, startByte, endByte]) => (
-            <ListGroup.Item
-              key={`${name}-${startByte}`}
-              action
-              onClick={() => handleResultClick(name, startByte, endByte)}
-            >
-              {name}
-            </ListGroup.Item>
-          ))}
-        </ListGroup>
-      )}
+      <ListGroup className="mt-3">
+        {results.map(([name, startByte, endByte]) => (
+          <ListGroup.Item
+            key={`${name}-${startByte}`}
+            action
+            onClick={() => handleResultClick(name, startByte, endByte)}
+          >
+            {name}
+          </ListGroup.Item>
+        ))}
+      </ListGroup>
 
       {selectedXml && (
         <Card className="mt-3">
