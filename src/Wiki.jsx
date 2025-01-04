@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { solarizedlight } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Container, Form, FormControl, ListGroup, Card } from "react-bootstrap";
@@ -11,56 +11,51 @@ const Wiki = () => {
 
   // Debounce search function and abort controller for cancelling requests
   const abortControllerRef = useRef(null);
-  let searchTimeout = null;
-
   const handleSearch = (e) => {
-    const value = e.target.value;
-    setQuery(value);
+    setQuery(e.target.value);
+    setSelectedXml(null); // Clear selected XML when the search box is cleared
+  };
 
-    if (searchTimeout) {
-      clearTimeout(searchTimeout);
+  useEffect(() => {
+    if (query.trim().length < 3) {
+      setResults([]);
+      setSearchStatus("");
+      return;
     }
 
-    if (value.trim().length >= 3) {
-      searchTimeout = setTimeout(() => {
-        setSearchStatus(`Searching for '${value}'...`);
+    setSearchStatus(`Searching for '${query}'...`);
 
-        if (abortControllerRef.current) {
-          abortControllerRef.current.abort(); // Cancel any ongoing fetch requests
-        }
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort(); // Cancel any ongoing fetch requests
+    }
 
-        const startTime = performance.now();
-        abortControllerRef.current = new AbortController();
-        const { signal } = abortControllerRef.current;
-        try {
-          fetch(`http://dgx:4444/offsets/${value}`, {
-            mode: "cors",
-            signal,
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              setResults(data);
-              const endTime = performance.now();
-              const duration = ((endTime - startTime) / 1000).toFixed(2);
-              setSearchStatus(`Received ${data.length} results for '${value}' in ${duration} seconds.`);
-            })
-            .catch((error) => {
-              if (error.name !== "AbortError") {
-                console.error("Error fetching search results:", error);
-                setResults([]);
-              }
-            });
-        } catch (error) {
+    const startTime = performance.now();
+    abortControllerRef.current = new AbortController();
+    const { signal } = abortControllerRef.current;
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`http://dgx:4444/offsets/${query}`, {
+          mode: "cors",
+          signal,
+        });
+        const data = await response.json();
+        setResults(data);
+        const endTime = performance.now();
+        const duration = ((endTime - startTime) / 1000).toFixed(2);
+        setSearchStatus(`Received ${data.length} results for '${query}' in ${duration} seconds.`);
+      } catch (error) {
+        if (error.name !== "AbortError") {
           console.error("Error fetching search results:", error);
           setResults([]);
         }
-      }, 1000);
-    } else {
-      setResults([]);
-      setSearchStatus("");
-    }
-    setSelectedXml(null); // Clear selected XML when the search box is cleared
-  };
+      }
+    };
+
+    const timeoutId = setTimeout(fetchData, 1000);
+
+    return () => clearTimeout(timeoutId);
+  }, [query]);
 
   // Handle item click and fetch XML data
   const handleResultClick = async (name, startByte, endByte) => {
