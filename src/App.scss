@@ -77,6 +77,13 @@ body {
     white-space: normal; // Allow text to wrap
 }
 
+.wiki-search-container .card-body {
+    white-space: pre-wrap; // Preserve whitespace and wrap lines
+    word-wrap: break-word; // Break long words
+    overflow-wrap: break-word; // Ensure long words break
+    line-height: 1.5; // Improve readability with line height
+}
+
 // Override specific elements with monospace font sizes
 code,
 kbd,
