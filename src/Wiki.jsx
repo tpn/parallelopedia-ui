@@ -120,15 +120,18 @@ const Wiki = () => {
         <div className="search-status mt-2 text-muted">{searchStatus}</div>
       )}
       <ListGroup className="mt-3">
-        {results.map(([name, startByte, endByte]) => (
-          <ListGroup.Item
-            key={`${name}-${startByte}`}
-            action
-            onClick={() => handleResultClick(name, startByte, endByte)}
-          >
-            {name}
-          </ListGroup.Item>
-        ))}
+        {results.map(([name, startByte, endByte]) => {
+          const size = endByte - startByte;
+          return (
+            <ListGroup.Item
+              key={`${name}-${startByte}`}
+              action
+              onClick={() => handleResultClick(name, startByte, endByte)}
+            >
+              {name} [{bytesToHuman(size)}]
+            </ListGroup.Item>
+          );
+        })}
       </ListGroup>
 
       {selectedXml && (
