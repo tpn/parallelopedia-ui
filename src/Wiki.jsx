@@ -1,7 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { solarizedlight } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { Container, Form, FormControl, ListGroup, Card, FormCheck } from "react-bootstrap";
+import {
+  Container,
+  Form,
+  FormControl,
+  ListGroup,
+  Card,
+  FormCheck,
+} from "react-bootstrap";
+import { bytesToHuman } from "./Utils";
 
 const Wiki = () => {
   const [query, setQuery] = useState("");
@@ -66,15 +74,17 @@ const Wiki = () => {
   // Handle item click and fetch data based on selected format
   const handleResultClick = async (name, startByte, endByte) => {
     try {
-      const url = format === "XML" ? "http://dgx:4444/xml" : "http://dgx:4444/html";
+      const url =
+        format === "XML" ? "http://dgx:4444/xml" : "http://dgx:4444/html";
       const response = await fetch(url, {
         headers: {
           Range: `bytes=${startByte}-${endByte}`,
         },
       });
       const data = await response.text();
-      setQuery(name); // Place the result's name into the search bar
       setShouldSearch(false);
+      setQuery(name); // Place the result's name into the search bar
+      //setShouldSearch(true);
       if (format === "XML") {
         setSelectedXml(data);
         setSelectedHtml(null);
@@ -82,13 +92,14 @@ const Wiki = () => {
         setSelectedHtml(data);
         setSelectedXml(null);
       }
-      setQuery(name); // Place the result's name into the search bar
-      setShouldSearch(false);
-      setSelectedXml(xmlData);
       setResults([]); // Clear results when an item is clicked
     } catch (error) {
       console.error("Error fetching XML data:", error);
-      setSelectedXml(null);
+      if (format === "XML") {
+        setSelectedXml(null);
+      } else {
+        setSelectedHtml(null);
+      }
     }
   };
 
@@ -104,25 +115,6 @@ const Wiki = () => {
           onChange={handleSearch}
         />
       </Form>
-
-      <FormCheck
-        type="radio"
-        label="XML"
-        name="format"
-        id="xml-radio"
-        checked={format === "XML"}
-        onChange={() => setFormat("XML")}
-        className="mt-2"
-      />
-      <FormCheck
-        type="radio"
-        label="HTML"
-        name="format"
-        id="html-radio"
-        checked={format === "HTML"}
-        onChange={() => setFormat("HTML")}
-        className="mb-2"
-      />
 
       {query && searchStatus && (
         <div className="search-status mt-2 text-muted">{searchStatus}</div>
