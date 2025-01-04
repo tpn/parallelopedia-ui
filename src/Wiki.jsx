@@ -36,6 +36,7 @@ const Wiki = () => {
         },
       });
       const xmlData = await response.text();
+      setQuery(xmlData); // Place the string content into the search bar
       setSelectedXml(xmlData);
       setResults([]); // Clear results when an item is clicked
     } catch (error) {
