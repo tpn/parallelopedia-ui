@@ -1,6 +1,7 @@
 import React from "react";
 import Stats from "./Stats";
 import Container from "react-bootstrap/Container";
+import Wiki from "./Wiki";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.scss";
 import { Tabs } from "react-bootstrap";
@@ -14,7 +15,9 @@ const App = () => {
       </header>
       <main>
         <Tabs defaultActiveKey="stats" id="main-tabs">
-          <Tab title="Wiki" eventKey="wiki"></Tab>
+          <Tab title="Wiki" eventKey="wiki">
+            <Wiki />
+          </Tab>
           <Tab title="Stats" eventKey="stats">
             <Stats />
           </Tab>
