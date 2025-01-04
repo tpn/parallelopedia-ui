@@ -18,9 +18,11 @@ const App = () => {
           <Tab title="Wiki" eventKey="wiki">
             <Wiki />
           </Tab>
-          <Tab title="Stats" eventKey="stats">
-            <Stats />
-          </Tab>
+          {false && (
+            <Tab title="Stats" eventKey="stats">
+              <Stats />
+            </Tab>
+          )}
         </Tabs>
       </main>
     </Container>
