@@ -37,6 +37,7 @@ const Wiki = () => {
       });
       const xmlData = await response.text();
       setSelectedXml(xmlData);
+      setResults([]); // Clear results when an item is clicked
     } catch (error) {
       console.error("Error fetching XML data:", error);
       setSelectedXml(null);
