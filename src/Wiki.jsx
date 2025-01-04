@@ -73,6 +73,7 @@ const Wiki = () => {
 
   // Handle item click and fetch data based on selected format
   const handleResultClick = async (name, startByte, endByte) => {
+    const startTime = performance.now();
     try {
       const url =
         format === "XML" ? "http://dgx:4444/xml" : "http://dgx:4444/html";
