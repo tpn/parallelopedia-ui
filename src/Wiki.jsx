@@ -92,9 +92,11 @@ const Wiki = () => {
         />
       </Form>
 
-      <div className="search-status mt-2 text-muted">
-        {searchStatus}
-      </div>
+      {query && (
+        <div className="search-status mt-2 text-muted">
+          {searchStatus}
+        </div>
+      )}
         <ListGroup className="mt-3">
           {results.map(([name, startByte, endByte]) => (
             <ListGroup.Item
