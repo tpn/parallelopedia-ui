@@ -63,6 +63,18 @@ body {
 
 .wiki-search-container {
     margin-top: 20px; // Add vertical space between the tab and the search box
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.wiki-search-container .list-group {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.wiki-search-container .list-group-item {
+    white-space: normal; // Allow text to wrap
 }
 
 // Override specific elements with monospace font sizes
