@@ -17,18 +17,18 @@ const Wiki = () => {
     const value = e.target.value;
     setQuery(value);
 
-    setSearchStatus(`Searching for '${value}'...`);
-    
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort(); // Cancel any ongoing fetch requests
-    }
-
     if (searchTimeout) {
       clearTimeout(searchTimeout);
     }
 
     if (value.trim().length >= 3) {
       searchTimeout = setTimeout(() => {
+        setSearchStatus(`Searching for '${value}'...`);
+
+        if (abortControllerRef.current) {
+          abortControllerRef.current.abort(); // Cancel any ongoing fetch requests
+        }
+
         const startTime = performance.now();
         abortControllerRef.current = new AbortController();
         const { signal } = abortControllerRef.current;
@@ -55,10 +55,11 @@ const Wiki = () => {
           setResults([]);
         }
       }, 1000);
-      setSelectedXml(null); // Clear selected XML when the search box is cleared
     } else {
       setResults([]);
+      setSearchStatus("");
     }
+    setSelectedXml(null); // Clear selected XML when the search box is cleared
   };
 
   // Handle item click and fetch XML data
