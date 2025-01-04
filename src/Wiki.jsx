@@ -1,13 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { solarizedlight } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { Container, Form, FormControl, ListGroup, Card } from "react-bootstrap";
+import { Container, Form, FormControl, ListGroup, Card, FormCheck } from "react-bootstrap";
 
 const Wiki = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [selectedXml, setSelectedXml] = useState(null);
+  const [format, setFormat] = useState("XML");
   const [shouldSearch, setShouldSearch] = useState(true);
+  const [selectedHtml, setSelectedHtml] = useState(null);
   const [searchStatus, setSearchStatus] = useState("");
 
   // Debounce search function and abort controller for cancelling requests
@@ -61,16 +63,25 @@ const Wiki = () => {
     return () => clearTimeout(timeoutId);
   }, [query]);
 
-  // Handle item click and fetch XML data
+  // Handle item click and fetch data based on selected format
   const handleResultClick = async (name, startByte, endByte) => {
     try {
-      const response = await fetch(`http://dgx:4444/xml`, {
+      const url = format === "XML" ? "http://dgx:4444/xml" : "http://dgx:4444/html";
+      const response = await fetch(url, {
         headers: {
           Range: `bytes=${startByte}-${endByte}`,
         },
       });
-      const xmlData = await response.text();
+      const data = await response.text();
       setQuery(name); // Place the result's name into the search bar
+      setShouldSearch(false);
+      if (format === "XML") {
+        setSelectedXml(data);
+        setSelectedHtml(null);
+      } else {
+        setSelectedHtml(data);
+        setSelectedXml(null);
+      }
       setQuery(name); // Place the result's name into the search bar
       setShouldSearch(false);
       setSelectedXml(xmlData);
@@ -83,7 +94,7 @@ const Wiki = () => {
 
   return (
     <Container className="wiki-search-container">
-      <Form>
+      <Form className="mb-3">
         <FormControl
           type="search"
           placeholder="Search"
@@ -94,7 +105,26 @@ const Wiki = () => {
         />
       </Form>
 
-      {query && (
+      <FormCheck
+        type="radio"
+        label="XML"
+        name="format"
+        id="xml-radio"
+        checked={format === "XML"}
+        onChange={() => setFormat("XML")}
+        className="mt-2"
+      />
+      <FormCheck
+        type="radio"
+        label="HTML"
+        name="format"
+        id="html-radio"
+        checked={format === "HTML"}
+        onChange={() => setFormat("HTML")}
+        className="mb-2"
+      />
+
+      {query && searchStatus && (
         <div className="search-status mt-2 text-muted">{searchStatus}</div>
       )}
       <ListGroup className="mt-3">
@@ -115,6 +145,13 @@ const Wiki = () => {
             <SyntaxHighlighter language="xml" style={solarizedlight}>
               {selectedXml}
             </SyntaxHighlighter>
+          </Card.Body>
+        </Card>
+      )}
+      {selectedHtml && (
+        <Card className="mt-3">
+          <Card.Body>
+            <div dangerouslySetInnerHTML={{ __html: selectedHtml }} />
           </Card.Body>
         </Card>
       )}
