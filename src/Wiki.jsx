@@ -82,12 +82,17 @@ const Wiki = () => {
         },
       });
       const data = await response.text();
+      const contentLength = response.headers.get("Content-Length");
+      const endTime = performance.now();
+      const duration = ((endTime - startTime) / 1000).toFixed(2);
       setShouldSearch(false);
       setQuery(name); // Place the result's name into the search bar
-      //setShouldSearch(true);
       if (format === "XML") {
         setSelectedXml(data);
         setSelectedHtml(null);
+        setSearchStatus(
+          `Received ${bytesToHuman(contentLength)} in ${duration} seconds.`
+        );
       } else {
         setSelectedHtml(data);
         setSelectedXml(null);
