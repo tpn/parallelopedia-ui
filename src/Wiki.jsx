@@ -13,7 +13,9 @@ const Wiki = () => {
 
     if (value.trim() !== "") {
       try {
-        const response = await fetch(`http://localhost:4444/offsets/${value}`);
+        const response = await fetch(`http://localhost:4444/offsets/${value}`, {
+          mode: 'cors'
+        });
         const data = await response.json();
         setResults(data);
       } catch (error) {
