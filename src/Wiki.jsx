@@ -1,4 +1,6 @@
 import React, { useState, useRef } from "react";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { solarizedlight } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Container, Form, FormControl, ListGroup, Card } from "react-bootstrap";
 
 const Wiki = () => {
@@ -100,7 +102,9 @@ const Wiki = () => {
       {selectedXml && (
         <Card className="mt-3">
           <Card.Body>
-            <pre>{selectedXml}</pre>
+            <SyntaxHighlighter language="xml" style={solarizedlight}>
+              {selectedXml}
+            </SyntaxHighlighter>
           </Card.Body>
         </Card>
       )}
