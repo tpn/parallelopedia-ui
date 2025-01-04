@@ -6,22 +6,30 @@ const Wiki = () => {
   const [results, setResults] = useState([]);
   const [selectedXml, setSelectedXml] = useState(null);
 
-  // Handle input change and fetch search results
-  const handleSearch = async (e) => {
+  // Debounce search function
+  let searchTimeout = null;
+
+  const handleSearch = (e) => {
     const value = e.target.value;
     setQuery(value);
 
+    if (searchTimeout) {
+      clearTimeout(searchTimeout);
+    }
+
     if (value.trim().length >= 3) {
-      try {
-        const response = await fetch(`http://dgx:4444/offsets/${value}`, {
-          mode: "cors",
-        });
-        const data = await response.json();
-        setResults(data);
-      } catch (error) {
-        console.error("Error fetching search results:", error);
-        setResults([]);
-      }
+      searchTimeout = setTimeout(async () => {
+        try {
+          const response = await fetch(`http://dgx:4444/offsets/${value}`, {
+            mode: "cors",
+          });
+          const data = await response.json();
+          setResults(data);
+        } catch (error) {
+          console.error("Error fetching search results:", error);
+          setResults([]);
+        }
+      }, 1000);
     } else {
       setResults([]);
     }
