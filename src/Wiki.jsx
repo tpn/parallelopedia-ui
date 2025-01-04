@@ -7,6 +7,7 @@ const Wiki = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [selectedXml, setSelectedXml] = useState(null);
+  const [searchStatus, setSearchStatus] = useState("");
 
   // Debounce search function and abort controller for cancelling requests
   const abortControllerRef = useRef(null);
@@ -16,6 +17,8 @@ const Wiki = () => {
     const value = e.target.value;
     setQuery(value);
 
+    setSearchStatus(`Searching for '${value}'...`);
+    
     if (abortControllerRef.current) {
       abortControllerRef.current.abort(); // Cancel any ongoing fetch requests
     }
@@ -36,6 +39,7 @@ const Wiki = () => {
             .then((response) => response.json())
             .then((data) => {
               setResults(data);
+              setSearchStatus(`Received ${data.length} results for '${value}'...`);
             })
             .catch((error) => {
               if (error.name !== "AbortError") {
@@ -85,7 +89,9 @@ const Wiki = () => {
         />
       </Form>
 
-      {results.length > 0 && (
+      <div className="search-status mt-2 text-muted">
+        {searchStatus}
+      </div>
         <ListGroup className="mt-3">
           {results.map(([name, startByte, endByte]) => (
             <ListGroup.Item
