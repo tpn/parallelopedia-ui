@@ -30,6 +30,7 @@ const Wiki = () => {
           setResults([]);
         }
       }, 1000);
+      setSelectedXml(null); // Clear selected XML when the search box is cleared
     } else {
       setResults([]);
     }
