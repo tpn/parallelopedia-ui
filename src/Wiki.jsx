@@ -7,17 +7,19 @@ const Wiki = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [selectedXml, setSelectedXml] = useState(null);
+  const [shouldSearch, setShouldSearch] = useState(true);
   const [searchStatus, setSearchStatus] = useState("");
 
   // Debounce search function and abort controller for cancelling requests
   const abortControllerRef = useRef(null);
   const handleSearch = (e) => {
     setQuery(e.target.value);
+    setShouldSearch(true);
     setSelectedXml(null); // Clear selected XML when the search box is cleared
   };
 
   useEffect(() => {
-    if (query.trim().length < 3) {
+    if (!shouldSearch || query.trim().length < 3) {
       setResults([]);
       setSearchStatus("");
       return;
@@ -67,6 +69,8 @@ const Wiki = () => {
       });
       const xmlData = await response.text();
       setQuery(name); // Place the result's name into the search bar
+      setQuery(name); // Place the result's name into the search bar
+      setShouldSearch(false);
       setSelectedXml(xmlData);
       setResults([]); // Clear results when an item is clicked
     } catch (error) {
