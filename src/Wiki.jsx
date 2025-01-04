@@ -6,25 +6,41 @@ const Wiki = () => {
   const [results, setResults] = useState([]);
   const [selectedXml, setSelectedXml] = useState(null);
 
-  // Debounce search function
+  // Debounce search function and abort controller for cancelling requests
+  const abortControllerRef = useRef(null);
   let searchTimeout = null;
 
   const handleSearch = (e) => {
     const value = e.target.value;
     setQuery(value);
 
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort(); // Cancel any ongoing fetch requests
+    }
+
     if (searchTimeout) {
       clearTimeout(searchTimeout);
     }
 
     if (value.trim().length >= 3) {
-      searchTimeout = setTimeout(async () => {
+      searchTimeout = setTimeout(() => {
+        abortControllerRef.current = new AbortController();
+        const { signal } = abortControllerRef.current;
         try {
-          const response = await fetch(`http://dgx:4444/offsets/${value}`, {
+          fetch(`http://dgx:4444/offsets/${value}`, {
             mode: "cors",
-          });
-          const data = await response.json();
-          setResults(data);
+            signal,
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              setResults(data);
+            })
+            .catch((error) => {
+              if (error.name !== "AbortError") {
+                console.error("Error fetching search results:", error);
+                setResults([]);
+              }
+            });
         } catch (error) {
           console.error("Error fetching search results:", error);
           setResults([]);
