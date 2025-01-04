@@ -11,7 +11,7 @@ const Wiki = () => {
     const value = e.target.value;
     setQuery(value);
 
-    if (value.trim() !== "") {
+    if (value.trim().length >= 3) {
       try {
         const response = await fetch(`http://dgx:4444/offsets/${value}`, {
           mode: "cors",
