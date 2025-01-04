@@ -31,7 +31,7 @@ const Wiki = () => {
   useEffect(() => {
     if (!shouldSearch || query.trim().length < 3) {
       setResults([]);
-      setSearchStatus("");
+      //setSearchStatus("");
       return;
     }
 
@@ -91,9 +91,11 @@ const Wiki = () => {
       if (format === "XML") {
         setSelectedXml(data);
         setSelectedHtml(null);
-        setSearchStatus(
-          `Received ${bytesToHuman(contentLength)} in ${duration} seconds.`
-        );
+        var msg = `Received ${bytesToHuman(
+          contentLength
+        )} in ${duration} seconds.`;
+        console.log(msg);
+        setSearchStatus(msg);
       } else {
         setSelectedHtml(data);
         setSelectedXml(null);
@@ -125,21 +127,23 @@ const Wiki = () => {
       {query && searchStatus && (
         <div className="search-status mt-2 text-muted">{searchStatus}</div>
       )}
-      <ListGroup className="mt-3">
-        {results.map(([name, startByte, endByte]) => {
-          const size = endByte - startByte;
-          return (
-            <ListGroup.Item
-              key={`${name}-${startByte}`}
-              action
-              onClick={() => handleResultClick(name, startByte, endByte)}
-            >
-              {name} [{bytesToHuman(size)}]
-            </ListGroup.Item>
-          );
-        })}
-      </ListGroup>
-
+      {/* Only render the ListGroup when results are available. */}
+      {results.length > 0 && (
+        <ListGroup className="mt-3">
+          {results.map(([name, startByte, endByte]) => {
+            const size = endByte - startByte;
+            return (
+              <ListGroup.Item
+                key={`${name}-${startByte}`}
+                action
+                onClick={() => handleResultClick(name, startByte, endByte)}
+              >
+                {name} [{bytesToHuman(size)}]
+              </ListGroup.Item>
+            );
+          })}
+        </ListGroup>
+      )}
       {selectedXml && (
         <Card className="mt-3">
           <Card.Body>
