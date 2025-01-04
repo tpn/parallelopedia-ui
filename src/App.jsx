@@ -14,7 +14,7 @@ const App = () => {
         <h1>Parallelopedia UI</h1>
       </header>
       <main>
-        <Tabs defaultActiveKey="stats" id="main-tabs">
+        <Tabs defaultActiveKey="wiki" id="main-tabs">
           <Tab title="Wiki" eventKey="wiki">
             <Wiki />
           </Tab>
