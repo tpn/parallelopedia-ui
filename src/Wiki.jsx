@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Container, Form, FormControl, ListGroup, Card } from "react-bootstrap";
 
 const Wiki = () => {
