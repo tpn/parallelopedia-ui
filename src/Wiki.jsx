@@ -36,7 +36,7 @@ const Wiki = () => {
   };
 
   // Handle item click and fetch XML data
-  const handleResultClick = async (startByte, endByte) => {
+  const handleResultClick = async (name, startByte, endByte) => {
     try {
       const response = await fetch(`http://dgx:4444/xml`, {
         headers: {
@@ -44,7 +44,7 @@ const Wiki = () => {
         },
       });
       const xmlData = await response.text();
-      setQuery(xmlData); // Place the string content into the search bar
+      setQuery(name); // Place the result's name into the search bar
       setSelectedXml(xmlData);
       setResults([]); // Clear results when an item is clicked
     } catch (error) {
@@ -72,7 +72,7 @@ const Wiki = () => {
             <ListGroup.Item
               key={`${name}-${startByte}`}
               action
-              onClick={() => handleResultClick(startByte, endByte)}
+              onClick={() => handleResultClick(name, startByte, endByte)}
             >
               {name}
             </ListGroup.Item>
