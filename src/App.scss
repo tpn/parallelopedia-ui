@@ -78,7 +78,8 @@ body {
 }
 
 .wiki-search-container .card-body {
-    white-space: pre-wrap; // Preserve whitespace and wrap lines
+    //white-space: pre-wrap; // Preserve whitespace and wrap lines
+    white-space: pre-line; // Preserve whitespace and wrap lines
     word-wrap: break-word; // Break long words
     overflow-wrap: break-word; // Ensure long words break
     line-height: 1.5; // Improve readability with line height
@@ -88,17 +89,17 @@ body {
 code,
 kbd,
 samp {
-    white-space: nowrap; // Prevents text wrapping
+    //white-space: nowrap; // Prevents text wrapping
     font-size: $font-size-monospace; // Apply custom font size to monospace elements
 }
 
 pre {
-    white-space: nowrap; // Prevents text wrapping
+    //white-space: nowrap; // Prevents text wrapping
     font-size: $font-size-monospace; // Apply custom font size to pre elements
 }
 
 pre code {
-    white-space: nowrap; // Prevents text wrapping
+    //white-space: nowrap; // Prevents text wrapping
     font-size: $font-size-monospace; // Apply custom font size to code inside pre
 }
 

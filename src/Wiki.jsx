@@ -147,7 +147,12 @@ const Wiki = () => {
       {selectedXml && (
         <Card className="mt-3">
           <Card.Body>
-            <SyntaxHighlighter language="xml" style={solarizedlight} wrapLongLines={true}>
+            <SyntaxHighlighter
+              language="xml"
+              style={solarizedlight}
+              wrapLongLines={true}
+              wrapLines={true}
+            >
               {selectedXml}
             </SyntaxHighlighter>
           </Card.Body>

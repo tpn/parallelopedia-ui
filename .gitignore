@@ -26,7 +26,6 @@ coverage
 # nyc test coverage
 .nyc_output
 
-# Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
 
 # Bower dependency directory (https://bower.io/)
@@ -38,10 +37,8 @@ bower_components
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
 
-# Dependency directories
-node_modules/
 jspm_packages/
-
+/.pnp
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
 
@@ -49,31 +46,25 @@ web_modules/
 *.tsbuildinfo
 
 # Optional npm cache directory
-.npm
 
 # Optional eslint cache
-.eslintcache
 
 # Optional stylelint cache
 .stylelintcache
 
 # Microbundle cache
-.rpt2_cache/
 .rts2_cache_cjs/
 .rts2_cache_es/
 .rts2_cache_umd/
 
 # Optional REPL history
-.node_repl_history
-
+/build
 # Output of 'npm pack'
 *.tgz
 
 # Yarn Integrity file
 .yarn-integrity
-
-# dotenv environment variable files
-.env
+# misc
 .env.development.local
 .env.test.local
 .env.production.local
