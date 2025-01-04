@@ -13,8 +13,8 @@ const Wiki = () => {
 
     if (value.trim() !== "") {
       try {
-        const response = await fetch(`http://localhost:4444/offsets/${value}`, {
-          mode: 'cors'
+        const response = await fetch(`http://dgx:4444/offsets/${value}`, {
+          mode: "cors",
         });
         const data = await response.json();
         setResults(data);
@@ -30,7 +30,7 @@ const Wiki = () => {
   // Handle item click and fetch XML data
   const handleResultClick = async (startByte, endByte) => {
     try {
-      const response = await fetch(`http://localhost:4444/xml`, {
+      const response = await fetch(`http://dgx:4444/xml`, {
         headers: {
           Range: `bytes=${startByte}-${endByte}`,
         },
