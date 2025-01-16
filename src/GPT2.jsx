@@ -36,8 +36,8 @@ const GPT2 = () => {
     setTotalChars(0); // Reset total characters
     setCharsPerSecond(0); // Reset characters per second
     setStartCharsTime(null); // Reset start character time
-    setTotalChars(0); // Reset total characters
     setResults(""); // Clear previous results
+
     const encodedText = encodeURIComponent(inputText);
     const response = await fetch(
       `http://dgx:4444/generate/${encodedText}?max_length=${maxLength}&seed=${seed}&device=${device}`,
@@ -57,6 +57,7 @@ const GPT2 = () => {
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
+
       const chunk = decoder.decode(value, { stream: true });
       const chars = chunk.length; // Calculate character length of the chunk
 
@@ -72,18 +73,6 @@ const GPT2 = () => {
         setCharsPerSecond(newCharsPerSecond);
         return newTotalChars;
       });
-
-      setResults((prevResults) => prevResults + chunk);
-        setStartCharsTime(performance.now());
-      }
-      const chunk = decoder.decode(value, { stream: true });
-      const chars = chunk.length; // Calculate character length of the chunk
-      setTotalChars((prevTotalChars) => prevTotalChars + chars);
-
-      const currentTime = performance.now();
-      const timeElapsed = (currentTime - startCharsTime) / 1000; // Convert to seconds
-      const newCharsPerSecond = (totalChars + chars) / timeElapsed;
-      setCharsPerSecond(newCharsPerSecond);
 
       setResults((prevResults) => prevResults + chunk);
     }
