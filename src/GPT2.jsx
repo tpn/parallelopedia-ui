@@ -29,11 +29,11 @@ const GPT2 = () => {
   const [headers, setHeaders] = useState("");
 
   const [charsPerSecond, setCharsPerSecond] = useState(0);
-  const [lastTokenTime, setLastTokenTime] = useState(null);
+  const [lastCharsTime, setLastCharsTime] = useState(null);
 
   const handleSubmit = async () => {
     setCharsPerSecond(0); // Reset characters per second
-    setLastTokenTime(null); // Reset last token time
+    setLastCharsTime(null); // Reset last character time
     setResults(""); // Clear previous results
     const encodedText = encodeURIComponent(inputText);
     const response = await fetch(
@@ -56,8 +56,8 @@ const GPT2 = () => {
       if (done) break;
       const currentTime = performance.now();
       const chunk = decoder.decode(value, { stream: true });
-      if (lastTokenTime !== null) {
-        const timeElapsed = (currentTime - lastTokenTime) / 1000; // Convert to seconds
+      if (lastCharsTime !== null) {
+        const timeElapsed = (currentTime - lastCharsTime) / 1000; // Convert to seconds
         const chars = chunk.length; // Calculate character length of the chunk
         const newCharsPerSecond = chars / timeElapsed;
         setCharsPerSecond((prevCharsPerSecond) => {
@@ -65,7 +65,7 @@ const GPT2 = () => {
           return newCharsPerSecond;
         });
       }
-      setLastTokenTime(currentTime);
+      setLastCharsTime(currentTime);
 
       setResults((prevResults) => prevResults + chunk);
     }
