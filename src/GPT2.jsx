@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Container, Form, FormControl, Button, Card } from "react-bootstrap";
+import { encodeURIComponent } from "querystring";
 import { Container, Form, FormControl, Button, Card } from "react-bootstrap";
 
 const GPT2 = () => {
@@ -8,9 +10,24 @@ const GPT2 = () => {
     setInputText(e.target.value);
   };
 
-  const handleSubmit = () => {
-    // Placeholder for future HTTP request
-    console.log("Submitted:", inputText);
+  const [results, setResults] = useState("");
+
+  const handleSubmit = async () => {
+    setResults(""); // Clear previous results
+    const encodedText = encodeURIComponent(inputText);
+    const response = await fetch(`http://dgx:4444/generate/${encodedText}`, {
+      method: "GET",
+    });
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder("utf-8");
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const chunk = decoder.decode(value, { stream: true });
+      setResults((prevResults) => prevResults + chunk);
+    }
   };
 
   return (
@@ -32,9 +49,8 @@ const GPT2 = () => {
         </Button>
       </Form>
       <Card className="mt-3">
-        <Card.Body>
-          {/* Placeholder for results */}
-          Results will be displayed here.
+        <Card.Body className="results-area">
+          {results || "Results will be displayed here."}
         </Card.Body>
       </Card>
     </Container>
