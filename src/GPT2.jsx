@@ -12,9 +12,9 @@ import {
 const GPT2 = () => {
   const [inputText, setInputText] = useState("");
 
-  const [maxLength, setMaxLength] = useState(100);
-  const [seed, setSeed] = useState(42);
-  const [device, setDevice] = useState("cuda:0");
+  const [maxLength, setMaxLength] = useState("");
+  const [seed, setSeed] = useState("");
+  const [device, setDevice] = useState("");
 
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
 
