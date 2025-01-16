@@ -50,7 +50,6 @@ const GPT2 = () => {
       headersObj[key] = value;
     });
     setHeaders(JSON.stringify(headersObj, null, 2));
-    const decoder = new TextDecoder("utf-8");
 
     while (true) {
       const { done, value } = await reader.read();
