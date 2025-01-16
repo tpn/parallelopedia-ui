@@ -56,6 +56,14 @@ const GPT2 = () => {
           value={inputText}
           onChange={handleInputChange}
         />
+        <Button
+          variant="primary"
+          onClick={handleSubmit}
+          disabled={!inputText.trim()}
+          className="ms-2"
+        >
+          Submit
+        </Button>
       </Form>
       <Form className="d-flex mb-3">
         <Form.Group className="me-2">
@@ -88,14 +96,6 @@ const GPT2 = () => {
             <option value="cpu">cpu</option>
           </Form.Select>
         </Form.Group>
-        <Button
-          variant="primary"
-          onClick={handleSubmit}
-          disabled={!inputText.trim()}
-          className="ms-2"
-        >
-          Submit
-        </Button>
       </Form>
       <Card className="mt-3">
         <Card.Body className="results-area">
