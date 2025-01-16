@@ -58,7 +58,11 @@ const GPT2 = () => {
       if (lastTokenTime !== null) {
         const timeElapsed = (currentTime - lastTokenTime) / 1000; // Convert to seconds
         const tokens = value.length; // Assuming each chunk is a token
-        setTokensPerSecond(tokens / timeElapsed);
+        const newTokensPerSecond = tokens / timeElapsed;
+        setTokensPerSecond((prevTokensPerSecond) => {
+          // Update the tokens per second
+          return newTokensPerSecond;
+        });
       }
       setLastTokenTime(currentTime);
 
