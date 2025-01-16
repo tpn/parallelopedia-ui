@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Form, FormControl, Button, Card } from "react-bootstrap";
+import { Container, Form, FormControl, Button, Card, Row, Col } from "react-bootstrap";
 
 const GPT2 = () => {
   const [inputText, setInputText] = useState("");
@@ -51,30 +51,36 @@ const GPT2 = () => {
 
   return (
     <Container className="gpt2-container mt-3">
-      <Form className="d-flex mb-3">
-        <FormControl
-          type="text"
-          placeholder="Enter text"
-          value={inputText}
-          onChange={handleInputChange}
-        />
-        <Button
-          variant="primary"
-          onClick={handleSubmit}
-          disabled={!inputText.trim()}
-          className="ms-2"
-        >
-          Submit
-        </Button>
-        <Form.Check
-          type="switch"
-          id="advanced-options-toggle"
-          label="Show Advanced Options"
-          checked={showAdvancedOptions}
-          onChange={() => setShowAdvancedOptions(!showAdvancedOptions)}
-          className="mb-3"
-        />
-      </Form>
+      <Row className="mb-3">
+        <Col>
+          <FormControl
+            type="text"
+            placeholder="Enter text"
+            value={inputText}
+            onChange={handleInputChange}
+          />
+        </Col>
+        <Col xs="auto">
+          <Button
+            variant="primary"
+            onClick={handleSubmit}
+            disabled={!inputText.trim()}
+          >
+            Submit
+          </Button>
+        </Col>
+      </Row>
+      <Row className="mb-3">
+        <Col>
+          <Form.Check
+            type="switch"
+            id="advanced-options-toggle"
+            label="Show Advanced Options"
+            checked={showAdvancedOptions}
+            onChange={() => setShowAdvancedOptions(!showAdvancedOptions)}
+          />
+        </Col>
+      </Row>
       {showAdvancedOptions && (
         <div className="p-3 border rounded">
           <Form className="d-flex mb-3">
