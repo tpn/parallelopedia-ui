@@ -28,7 +28,12 @@ const GPT2 = () => {
 
   const [headers, setHeaders] = useState("");
 
+  const [tokensPerSecond, setTokensPerSecond] = useState(0);
+  const [lastTokenTime, setLastTokenTime] = useState(null);
+
   const handleSubmit = async () => {
+    setTokensPerSecond(0); // Reset tokens per second
+    setLastTokenTime(null); // Reset last token time
     setResults(""); // Clear previous results
     const encodedText = encodeURIComponent(inputText);
     const response = await fetch(
@@ -49,6 +54,14 @@ const GPT2 = () => {
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
+      const currentTime = performance.now();
+      if (lastTokenTime !== null) {
+        const timeElapsed = (currentTime - lastTokenTime) / 1000; // Convert to seconds
+        const tokens = value.length; // Assuming each chunk is a token
+        setTokensPerSecond(tokens / timeElapsed);
+      }
+      setLastTokenTime(currentTime);
+
       const chunk = decoder.decode(value, { stream: true });
       setResults((prevResults) => prevResults + chunk);
     }
@@ -156,6 +169,9 @@ const GPT2 = () => {
           <Card.Body className="results-area">
             {results || "Results will be displayed here."}
           </Card.Body>
+          <Card.Footer className="text-muted">
+            {tokensPerSecond.toFixed(2)} toks/s
+          </Card.Footer>
         </Card>
       </Container>
     </>
