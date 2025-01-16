@@ -29,11 +29,13 @@ const GPT2 = () => {
   const [headers, setHeaders] = useState("");
 
   const [charsPerSecond, setCharsPerSecond] = useState(0);
-  const [lastCharsTime, setLastCharsTime] = useState(null);
+  const [startCharsTime, setStartCharsTime] = useState(null);
+  const [totalChars, setTotalChars] = useState(0);
 
   const handleSubmit = async () => {
     setCharsPerSecond(0); // Reset characters per second
-    setLastCharsTime(null); // Reset last character time
+    setStartCharsTime(null); // Reset start character time
+    setTotalChars(0); // Reset total characters
     setResults(""); // Clear previous results
     const encodedText = encodeURIComponent(inputText);
     const response = await fetch(
@@ -54,15 +56,18 @@ const GPT2 = () => {
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
-      const currentTime = performance.now();
-      const chunk = decoder.decode(value, { stream: true });
-      if (lastCharsTime !== null) {
-        const timeElapsed = (currentTime - lastCharsTime) / 1000; // Convert to seconds
-        const chars = chunk.length; // Calculate character length of the chunk
-        const newCharsPerSecond = chars / timeElapsed;
-        setCharsPerSecond(newCharsPerSecond);
+      if (startCharsTime === null) {
+        setStartCharsTime(performance.now());
       }
-      setLastCharsTime(currentTime);
+      const chunk = decoder.decode(value, { stream: true });
+      const chars = chunk.length; // Calculate character length of the chunk
+      setTotalChars((prevTotalChars) => prevTotalChars + chars);
+
+      const currentTime = performance.now();
+      const timeElapsed = (currentTime - startCharsTime) / 1000; // Convert to seconds
+      const newCharsPerSecond = totalChars / timeElapsed;
+      setCharsPerSecond(newCharsPerSecond);
+      
 
       setResults((prevResults) => prevResults + chunk);
     }
