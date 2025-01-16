@@ -8,6 +8,8 @@ const GPT2 = () => {
   const [seed, setSeed] = useState(42);
   const [device, setDevice] = useState("cuda:0");
 
+  const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
+
   const handleInputChange = (e) => {
     setInputText(e.target.value);
   };
@@ -50,6 +52,14 @@ const GPT2 = () => {
   return (
     <Container className="gpt2-container mt-3">
       <Form className="d-flex mb-3">
+        <Form.Check
+          type="switch"
+          id="advanced-options-toggle"
+          label="Show Advanced Options"
+          checked={showAdvancedOptions}
+          onChange={() => setShowAdvancedOptions(!showAdvancedOptions)}
+          className="mb-3"
+        />
         <FormControl
           type="text"
           placeholder="Enter text"
@@ -65,38 +75,42 @@ const GPT2 = () => {
           Submit
         </Button>
       </Form>
-      <Form className="d-flex mb-3">
-        <Form.Group className="d-flex align-items-center me-2">
-          <Form.Label className="me-2 mb-0">Max Length</Form.Label>
-          <FormControl
-            type="number"
-            placeholder="Max Length"
-            value={maxLength}
-            onChange={handleMaxLengthChange}
-            min="10"
-            max="1024"
-          />
-        </Form.Group>
-        <Form.Group className="d-flex align-items-center me-2">
-          <Form.Label className="me-2 mb-0">Seed</Form.Label>
-          <FormControl
-            type="number"
-            placeholder="Seed"
-            value={seed}
-            onChange={handleSeedChange}
-          />
-        </Form.Group>
-        <Form.Group className="d-flex align-items-center me-2">
-          <Form.Label className="me-2 mb-0">Device</Form.Label>
-          <Form.Select value={device} onChange={handleDeviceChange}>
-            <option value="cuda:0">cuda:0</option>
-            <option value="cuda:1">cuda:1</option>
-            <option value="cuda:2">cuda:2</option>
-            <option value="cuda:3">cuda:3</option>
-            <option value="cpu">cpu</option>
-          </Form.Select>
-        </Form.Group>
-      </Form>
+      {showAdvancedOptions && (
+        <div className="p-3 border rounded">
+          <Form className="d-flex mb-3">
+            <Form.Group className="d-flex align-items-center me-2">
+              <Form.Label className="me-2 mb-0">Max Length</Form.Label>
+              <FormControl
+                type="number"
+                placeholder="Max Length"
+                value={maxLength}
+                onChange={handleMaxLengthChange}
+                min="10"
+                max="1024"
+              />
+            </Form.Group>
+            <Form.Group className="d-flex align-items-center me-2">
+              <Form.Label className="me-2 mb-0">Seed</Form.Label>
+              <FormControl
+                type="number"
+                placeholder="Seed"
+                value={seed}
+                onChange={handleSeedChange}
+              />
+            </Form.Group>
+            <Form.Group className="d-flex align-items-center me-2">
+              <Form.Label className="me-2 mb-0">Device</Form.Label>
+              <Form.Select value={device} onChange={handleDeviceChange}>
+                <option value="cuda:0">cuda:0</option>
+                <option value="cuda:1">cuda:1</option>
+                <option value="cuda:2">cuda:2</option>
+                <option value="cuda:3">cuda:3</option>
+                <option value="cpu">cpu</option>
+              </Form.Select>
+            </Form.Group>
+          </Form>
+        </div>
+      )}
       <Card className="mt-3">
         <Card.Body className="results-area">
           {results || "Results will be displayed here."}
