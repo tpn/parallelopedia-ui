@@ -65,9 +65,8 @@ const GPT2 = () => {
 
       const currentTime = performance.now();
       const timeElapsed = (currentTime - startCharsTime) / 1000; // Convert to seconds
-      const newCharsPerSecond = totalChars / timeElapsed;
+      const newCharsPerSecond = (totalChars + chars) / timeElapsed;
       setCharsPerSecond(newCharsPerSecond);
-      
 
       setResults((prevResults) => prevResults + chunk);
     }
