@@ -57,7 +57,23 @@ const GPT2 = () => {
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
+      const chunk = decoder.decode(value, { stream: true });
+      const chars = chunk.length; // Calculate character length of the chunk
+
       if (startCharsTime === null) {
+        setStartCharsTime(performance.now());
+      }
+
+      setTotalChars((prevTotalChars) => {
+        const newTotalChars = prevTotalChars + chars;
+        const currentTime = performance.now();
+        const timeElapsed = (currentTime - startCharsTime) / 1000; // Convert to seconds
+        const newCharsPerSecond = newTotalChars / timeElapsed;
+        setCharsPerSecond(newCharsPerSecond);
+        return newTotalChars;
+      });
+
+      setResults((prevResults) => prevResults + chunk);
         setStartCharsTime(performance.now());
       }
       const chunk = decoder.decode(value, { stream: true });
