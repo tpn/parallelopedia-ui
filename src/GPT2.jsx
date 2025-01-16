@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Container, Form, FormControl, Button, Card, Row, Col } from "react-bootstrap";
+import {
+  Container,
+  Form,
+  FormControl,
+  Button,
+  Card,
+  Row,
+  Col,
+} from "react-bootstrap";
 
 const GPT2 = () => {
   const [inputText, setInputText] = useState("");
@@ -52,95 +60,97 @@ const GPT2 = () => {
   };
 
   return (
-    <Container className="gpt2-container mt-3">
-      <Row className="mb-3">
-        <Col>
-          <FormControl
-            type="text"
-            placeholder="Enter text"
-            value={inputText}
-            onChange={handleInputChange}
-          />
-        </Col>
-        <Col xs="auto">
-          <Button
-            variant="primary"
-            onClick={handleSubmit}
-            disabled={!inputText.trim()}
-          >
-            Submit
-          </Button>
-        </Col>
-      </Row>
-      <Row className="mb-3">
-        <Col>
-          <Form.Check
-            type="switch"
-            id="advanced-options-toggle"
-            label="Show Advanced Options"
-            checked={showAdvancedOptions}
-            onChange={() => setShowAdvancedOptions(!showAdvancedOptions)}
-          />
-        </Col>
-      </Row>
-      <Row className="mb-3">
-        <Col>
-          <Form.Check
-            type="switch"
-            id="show-headers-toggle"
-            label="Show Headers"
-            checked={showHeaders}
-            onChange={() => setShowHeaders(!showHeaders)}
-          />
-        </Col>
-      </Row>
-        <div className="p-3 border rounded">
-          <Form className="d-flex mb-3">
-            <Form.Group className="d-flex align-items-center me-2">
-              <Form.Label className="me-2 mb-0">Max Length</Form.Label>
-              <FormControl
-                type="number"
-                placeholder="Max Length"
-                value={maxLength}
-                onChange={handleMaxLengthChange}
-                min="10"
-                max="1024"
-              />
-            </Form.Group>
-            <Form.Group className="d-flex align-items-center me-2">
-              <Form.Label className="me-2 mb-0">Seed</Form.Label>
-              <FormControl
-                type="number"
-                placeholder="Seed"
-                value={seed}
-                onChange={handleSeedChange}
-              />
-            </Form.Group>
-            <Form.Group className="d-flex align-items-center me-2">
-              <Form.Label className="me-2 mb-0">Device</Form.Label>
-              <Form.Select value={device} onChange={handleDeviceChange}>
-                <option value="cuda:0">cuda:0</option>
-                <option value="cuda:1">cuda:1</option>
-                <option value="cuda:2">cuda:2</option>
-                <option value="cuda:3">cuda:3</option>
-                <option value="cpu">cpu</option>
-              </Form.Select>
-            </Form.Group>
-          </Form>
-        </div>
-      )}
-      {showHeaders && (
+    <>
+      <Container className="gpt2-container mt-3">
+        <Row className="mb-3">
+          <Col>
+            <FormControl
+              type="text"
+              placeholder="Enter text"
+              value={inputText}
+              onChange={handleInputChange}
+            />
+          </Col>
+          <Col xs="auto">
+            <Button
+              variant="primary"
+              onClick={handleSubmit}
+              disabled={!inputText.trim()}
+            >
+              Submit
+            </Button>
+          </Col>
+        </Row>
+        <Row className="mb-3">
+          <Col>
+            <Form.Check
+              type="switch"
+              id="advanced-options-toggle"
+              label="Show Advanced Options"
+              checked={showAdvancedOptions}
+              onChange={() => setShowAdvancedOptions(!showAdvancedOptions)}
+            />
+          </Col>
+          <Col>
+            <Form.Check
+              type="switch"
+              id="show-headers-toggle"
+              label="Show Headers"
+              checked={showHeaders}
+              onChange={() => setShowHeaders(!showHeaders)}
+            />
+          </Col>
+        </Row>
+      </Container>
+      <Container>
+        {showAdvancedOptions && (
+          <div className="p-3 border rounded">
+            <Form className="d-flex mb-3">
+              <Form.Group className="d-flex align-items-center me-2">
+                <Form.Label className="me-2 mb-0">Max Length</Form.Label>
+                <FormControl
+                  type="number"
+                  placeholder="Max Length"
+                  value={maxLength}
+                  onChange={handleMaxLengthChange}
+                  min="10"
+                  max="1024"
+                />
+              </Form.Group>
+              <Form.Group className="d-flex align-items-center me-2">
+                <Form.Label className="me-2 mb-0">Seed</Form.Label>
+                <FormControl
+                  type="number"
+                  placeholder="Seed"
+                  value={seed}
+                  onChange={handleSeedChange}
+                />
+              </Form.Group>
+              <Form.Group className="d-flex align-items-center me-2">
+                <Form.Label className="me-2 mb-0">Device</Form.Label>
+                <Form.Select value={device} onChange={handleDeviceChange}>
+                  <option value="cuda:0">cuda:0</option>
+                  <option value="cuda:1">cuda:1</option>
+                  <option value="cuda:2">cuda:2</option>
+                  <option value="cuda:3">cuda:3</option>
+                  <option value="cpu">cpu</option>
+                </Form.Select>
+              </Form.Group>
+            </Form>
+          </div>
+        )}
         <Card className="mt-3">
-          <Card.Body className="headers-area">
-            {/* Headers will be displayed here */}
+          {showHeaders && (
+            <Card.Body className="headers-area">
+              {/* Headers will be displayed here */}
+            </Card.Body>
+          )}
+          <Card.Body className="results-area">
+            {results || "Results will be displayed here."}
           </Card.Body>
         </Card>
-      )}
-        <Card.Body className="results-area">
-          {results || "Results will be displayed here."}
-        </Card.Body>
-      </Card>
-    </Container>
+      </Container>
+    </>
   );
 };
 
