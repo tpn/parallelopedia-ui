@@ -58,29 +58,36 @@ const GPT2 = () => {
         />
       </Form>
       <Form className="d-flex mb-3">
-        <FormControl
-          type="number"
-          placeholder="Max Length"
-          value={maxLength}
-          onChange={handleMaxLengthChange}
-          min="10"
-          max="1024"
-          className="me-2"
-        />
-        <FormControl
-          type="number"
-          placeholder="Seed"
-          value={seed}
-          onChange={handleSeedChange}
-          className="me-2"
-        />
-        <Form.Select value={device} onChange={handleDeviceChange} className="me-2">
-          <option value="cuda:0">cuda:0</option>
-          <option value="cuda:1">cuda:1</option>
-          <option value="cuda:2">cuda:2</option>
-          <option value="cuda:3">cuda:3</option>
-          <option value="cpu">cpu</option>
-        </Form.Select>
+        <Form.Group className="me-2">
+          <Form.Label>Max Length</Form.Label>
+          <FormControl
+            type="number"
+            placeholder="Max Length"
+            value={maxLength}
+            onChange={handleMaxLengthChange}
+            min="10"
+            max="1024"
+          />
+        </Form.Group>
+        <Form.Group className="me-2">
+          <Form.Label>Seed</Form.Label>
+          <FormControl
+            type="number"
+            placeholder="Seed"
+            value={seed}
+            onChange={handleSeedChange}
+          />
+        </Form.Group>
+        <Form.Group className="me-2">
+          <Form.Label>Device</Form.Label>
+          <Form.Select value={device} onChange={handleDeviceChange}>
+            <option value="cuda:0">cuda:0</option>
+            <option value="cuda:1">cuda:1</option>
+            <option value="cuda:2">cuda:2</option>
+            <option value="cuda:3">cuda:3</option>
+            <option value="cpu">cpu</option>
+          </Form.Select>
+        </Form.Group>
         <Button
           variant="primary"
           onClick={handleSubmit}
