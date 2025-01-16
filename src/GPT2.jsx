@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { encodeURIComponent } from "querystring";
 import { Container, Form, FormControl, Button, Card } from "react-bootstrap";
 
 const GPT2 = () => {
