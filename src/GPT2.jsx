@@ -60,10 +60,7 @@ const GPT2 = () => {
         const timeElapsed = (currentTime - lastCharsTime) / 1000; // Convert to seconds
         const chars = chunk.length; // Calculate character length of the chunk
         const newCharsPerSecond = chars / timeElapsed;
-        setCharsPerSecond((prevCharsPerSecond) => {
-          // Update the characters per second
-          return newCharsPerSecond;
-        });
+        setCharsPerSecond(newCharsPerSecond);
       }
       setLastCharsTime(currentTime);
 
