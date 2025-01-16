@@ -38,6 +38,7 @@ const GPT2 = () => {
       }
     );
 
+    const reader = response.body.getReader();
     const headersObj = {};
     response.headers.forEach((value, key) => {
       headersObj[key] = value;
