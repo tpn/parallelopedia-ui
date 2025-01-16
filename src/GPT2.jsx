@@ -26,6 +26,8 @@ const GPT2 = () => {
 
   const [results, setResults] = useState("");
 
+  const [headers, setHeaders] = useState("");
+
   const handleSubmit = async () => {
     setResults(""); // Clear previous results
     const encodedText = encodeURIComponent(inputText);
@@ -36,7 +38,11 @@ const GPT2 = () => {
       }
     );
 
-    const reader = response.body.getReader();
+    const headersObj = {};
+    response.headers.forEach((value, key) => {
+      headersObj[key] = value;
+    });
+    setHeaders(JSON.stringify(headersObj, null, 2));
     const decoder = new TextDecoder("utf-8");
 
     while (true) {
@@ -142,7 +148,7 @@ const GPT2 = () => {
         <Card className="mt-3">
           {showHeaders && (
             <Card.Body className="headers-area">
-              {/* Headers will be displayed here */}
+              <pre>{headers}</pre>
             </Card.Body>
           )}
           <Card.Body className="results-area">
