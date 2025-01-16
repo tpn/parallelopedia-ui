@@ -10,6 +10,8 @@ const GPT2 = () => {
 
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
 
+  const [showHeaders, setShowHeaders] = useState(false);
+
   const handleInputChange = (e) => {
     setInputText(e.target.value);
   };
@@ -81,7 +83,17 @@ const GPT2 = () => {
           />
         </Col>
       </Row>
-      {showAdvancedOptions && (
+      <Row className="mb-3">
+        <Col>
+          <Form.Check
+            type="switch"
+            id="show-headers-toggle"
+            label="Show Headers"
+            checked={showHeaders}
+            onChange={() => setShowHeaders(!showHeaders)}
+          />
+        </Col>
+      </Row>
         <div className="p-3 border rounded">
           <Form className="d-flex mb-3">
             <Form.Group className="d-flex align-items-center me-2">
@@ -117,7 +129,13 @@ const GPT2 = () => {
           </Form>
         </div>
       )}
-      <Card className="mt-3">
+      {showHeaders && (
+        <Card className="mt-3">
+          <Card.Body className="headers-area">
+            {/* Headers will be displayed here */}
+          </Card.Body>
+        </Card>
+      )}
         <Card.Body className="results-area">
           {results || "Results will be displayed here."}
         </Card.Body>
