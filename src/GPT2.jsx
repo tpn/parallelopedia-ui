@@ -40,6 +40,7 @@ const GPT2 = () => {
       `http://dgx:4444/generate/${encodedText}?max_length=${maxLength}&seed=${seed}&device=${device}`,
       {
         method: "GET",
+        const chunk = decoder.decode(value, { stream: true });
       }
     );
 
@@ -57,7 +58,6 @@ const GPT2 = () => {
       const currentTime = performance.now();
       if (lastTokenTime !== null) {
         const timeElapsed = (currentTime - lastTokenTime) / 1000; // Convert to seconds
-        const chunk = decoder.decode(value, { stream: true });
         const chars = chunk.length; // Calculate character length of the chunk
         const newCharsPerSecond = chars / timeElapsed;
         setCharsPerSecond((prevCharsPerSecond) => {
