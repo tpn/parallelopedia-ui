@@ -33,6 +33,7 @@ const GPT2 = () => {
   const [totalChars, setTotalChars] = useState(0);
 
   const handleSubmit = async () => {
+    setTotalChars(0); // Reset total characters
     setCharsPerSecond(0); // Reset characters per second
     setStartCharsTime(null); // Reset start character time
     setTotalChars(0); // Reset total characters
