@@ -14,7 +14,7 @@ const App = () => {
       <header className="py-3">
         <h1>Parallelopedia UI</h1>
       </header>
-      <main>
+      <main className="mt-3">
         <Tabs defaultActiveKey="wiki" id="main-tabs">
           <Tab title="Wiki" eventKey="wiki">
             <Wiki />

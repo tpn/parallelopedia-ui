@@ -14,7 +14,7 @@ const GPT2 = () => {
   };
 
   return (
-    <Container className="gpt2-container">
+    <Container className="gpt2-container mt-3">
       <Form className="d-flex mb-3">
         <FormControl
           type="text"
