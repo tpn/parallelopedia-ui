@@ -66,8 +66,8 @@ const GPT2 = () => {
         </Button>
       </Form>
       <Form className="d-flex mb-3">
-        <Form.Group className="me-2">
-          <Form.Label>Max Length</Form.Label>
+        <Form.Group className="d-flex align-items-center me-2">
+          <Form.Label className="me-2 mb-0">Max Length</Form.Label>
           <FormControl
             type="number"
             placeholder="Max Length"
@@ -77,8 +77,8 @@ const GPT2 = () => {
             max="1024"
           />
         </Form.Group>
-        <Form.Group className="me-2">
-          <Form.Label>Seed</Form.Label>
+        <Form.Group className="d-flex align-items-center me-2">
+          <Form.Label className="me-2 mb-0">Seed</Form.Label>
           <FormControl
             type="number"
             placeholder="Seed"
@@ -86,8 +86,8 @@ const GPT2 = () => {
             onChange={handleSeedChange}
           />
         </Form.Group>
-        <Form.Group className="me-2">
-          <Form.Label>Device</Form.Label>
+        <Form.Group className="d-flex align-items-center me-2">
+          <Form.Label className="me-2 mb-0">Device</Form.Label>
           <Form.Select value={device} onChange={handleDeviceChange}>
             <option value="cuda:0">cuda:0</option>
             <option value="cuda:1">cuda:1</option>
