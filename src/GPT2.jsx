@@ -136,6 +136,7 @@ const GPT2 = () => {
               <Form.Group className="d-flex align-items-center me-2">
                 <Form.Label className="me-2 mb-0">Device</Form.Label>
                 <Form.Select value={device} onChange={handleDeviceChange}>
+                  <option value="">Select a device</option>
                   <option value="cuda:0">cuda:0</option>
                   <option value="cuda:1">cuda:1</option>
                   <option value="cuda:2">cuda:2</option>
