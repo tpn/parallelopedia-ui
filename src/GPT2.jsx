@@ -52,14 +52,6 @@ const GPT2 = () => {
   return (
     <Container className="gpt2-container mt-3">
       <Form className="d-flex mb-3">
-        <Form.Check
-          type="switch"
-          id="advanced-options-toggle"
-          label="Show Advanced Options"
-          checked={showAdvancedOptions}
-          onChange={() => setShowAdvancedOptions(!showAdvancedOptions)}
-          className="mb-3"
-        />
         <FormControl
           type="text"
           placeholder="Enter text"
@@ -74,6 +66,14 @@ const GPT2 = () => {
         >
           Submit
         </Button>
+        <Form.Check
+          type="switch"
+          id="advanced-options-toggle"
+          label="Show Advanced Options"
+          checked={showAdvancedOptions}
+          onChange={() => setShowAdvancedOptions(!showAdvancedOptions)}
+          className="mb-3"
+        />
       </Form>
       {showAdvancedOptions && (
         <div className="p-3 border rounded">
