@@ -45,7 +45,7 @@ const GPT2 = () => {
 
     const encodedText = encodeURIComponent(inputText);
     const response = await fetch(
-      `http://dgx:4444/generate/${encodedText}?max_length=${maxLength}&seed=${seed}&device=${device}`,
+      `http://dgx:4444/generate/${encodedText}?max_length=${maxLength}&seed=${seed}&device=${device}&model=${modelName}`,
       {
         method: "GET",
       }
@@ -188,7 +188,7 @@ const GPT2 = () => {
                   <option value="gpt2-xl">gpt2-xl</option>
                 </Form.Select>
               </Form.Group>
-            </Form> 
+            </Form>
           </div>
         )}
         <Card className="mt-3">

@@ -1,3 +1,13 @@
+# Parallelopedia UI
+
+This is the front-end for the [parallelopedia](
+https://github.com/tpn/parallelopedia) project, in support of the article
+[From PyParallel to Python Free-Threading: Optimally Exploiting Multiple Cores with Python](
+https://trent.me/articles/from-pyparallel-to-python-free-threading/).
+
+It is a React Bootstrap application.  The remaining text is the default README
+generated when creating a new React app.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
