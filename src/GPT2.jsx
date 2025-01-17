@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Container,
   Form,
@@ -17,7 +17,6 @@ const GPT2 = () => {
   const [device, setDevice] = useState("");
 
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
-
   const [showHeaders, setShowHeaders] = useState(false);
 
   const handleInputChange = (e) => {
@@ -25,17 +24,22 @@ const GPT2 = () => {
   };
 
   const [results, setResults] = useState("");
-
   const [headers, setHeaders] = useState("");
 
-  const [charsPerSecond, setCharsPerSecond] = useState(0);
-  const [startCharsTime, setStartCharsTime] = useState(null);
-  const [totalChars, setTotalChars] = useState(0);
+  // Combine all related state into a single object
+  const [{ totalChars, charsPerSecond, startCharsTime }, setState] = useState({
+    totalChars: 0,
+    charsPerSecond: 0,
+    startCharsTime: null,
+  });
 
   const handleSubmit = async () => {
-    setTotalChars(0); // Reset total characters
-    setCharsPerSecond(0); // Reset characters per second
-    setStartCharsTime(null); // Reset start character time
+    setState((prevState) => ({
+      ...prevState,
+      totalChars: 0, // Reset total characters
+      charsPerSecond: 0, // Reset characters per second
+      startCharsTime: null, // Reset start character time
+    }));
     setResults(""); // Clear previous results
 
     const encodedText = encodeURIComponent(inputText);
@@ -61,17 +65,21 @@ const GPT2 = () => {
       const chunk = decoder.decode(value, { stream: true });
       const chars = chunk.length; // Calculate character length of the chunk
 
-      if (startCharsTime === null) {
-        setStartCharsTime(performance.now());
-      }
-
-      setTotalChars((prevTotalChars) => {
-        const newTotalChars = prevTotalChars + chars;
+      setState((prevState) => {
+        const newTotalChars = prevState.totalChars + chars;
+        let startTime = prevState.startCharsTime;
+        if (startTime === null) {
+          startTime = performance.now();
+        }
         const currentTime = performance.now();
-        const timeElapsed = (currentTime - startCharsTime) / 1000; // Convert to seconds
+        const timeElapsed = (currentTime - startTime) / 1000; // Convert to seconds
         const newCharsPerSecond = newTotalChars / timeElapsed;
-        setCharsPerSecond(newCharsPerSecond);
-        return newTotalChars;
+
+        return {
+          totalChars: newTotalChars,
+          charsPerSecond: newCharsPerSecond,
+          startCharsTime: startTime,
+        };
       });
 
       setResults((prevResults) => prevResults + chunk);
