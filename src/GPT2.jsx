@@ -16,6 +16,7 @@ const GPT2 = () => {
   const [seed, setSeed] = useState("");
   const [device, setDevice] = useState("");
 
+  const [modelName, setModelName] = useState("gpt2");
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
   const [showHeaders, setShowHeaders] = useState(false);
 
@@ -98,6 +99,10 @@ const GPT2 = () => {
     setDevice(e.target.value);
   };
 
+  const handleModelNameChange = (e) => {
+    setModelName(e.target.value);
+  };
+
   return (
     <>
       <Container className="gpt2-container mt-3">
@@ -176,7 +181,14 @@ const GPT2 = () => {
                   <option value="cpu">cpu</option>
                 </Form.Select>
               </Form.Group>
-            </Form>
+              <Form.Group className="d-flex align-items-center me-2">
+                <Form.Label className="me-2 mb-0">Model Name</Form.Label>
+                <Form.Select value={modelName} onChange={handleModelNameChange}>
+                  <option value="gpt2">gpt2</option>
+                  <option value="gpt2-xl">gpt2-xl</option>
+                </Form.Select>
+              </Form.Group>
+            </Form> 
           </div>
         )}
         <Card className="mt-3">
