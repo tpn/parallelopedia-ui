@@ -151,7 +151,7 @@ const GPT2 = () => {
           <div className="p-3 border rounded">
             <Form className="d-flex mb-3">
               <Form.Group className="d-flex align-items-center me-2">
-                <Form.Label className="me-2 mb-0">Max Length</Form.Label>
+                <Form.Label className="me-2 mb-0" style={{ whiteSpace: 'nowrap' }}>Max Length</Form.Label>
                 <FormControl
                   type="number"
                   placeholder="Max Length"
@@ -182,7 +182,7 @@ const GPT2 = () => {
                 </Form.Select>
               </Form.Group>
               <Form.Group className="d-flex align-items-center me-2">
-                <Form.Label className="me-2 mb-0">Model Name</Form.Label>
+                <Form.Label className="me-2 mb-0" style={{ whiteSpace: 'nowrap' }}>Model Name</Form.Label>
                 <Form.Select value={modelName} onChange={handleModelNameChange}>
                   <option value="gpt2">gpt2</option>
                   <option value="gpt2-xl">gpt2-xl</option>
