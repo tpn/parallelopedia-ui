@@ -2,7 +2,7 @@ import React from "react";
 import Stats from "./Stats";
 import Container from "react-bootstrap/Container";
 import Wiki from "./Wiki";
-import GPT2 from "./GPT2";
+import LLM from "./LLM";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.scss";
 import { Tabs } from "react-bootstrap";
@@ -24,8 +24,8 @@ const App = () => {
               <Stats />
             </Tab>
           )}
-          <Tab title="GPT2" eventKey="gpt2">
-            <GPT2 />
+          <Tab title="LLM" eventKey="llm">
+            <LLM />
           </Tab>
         </Tabs>
       </main>
