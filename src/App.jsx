@@ -2,7 +2,7 @@ import React from "react";
 import Stats from "./Stats";
 import Container from "react-bootstrap/Container";
 import Wiki from "./Wiki";
-import LLM from "./LLM";
+import GPT2 from "./GPT2";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.scss";
 import { Tabs } from "react-bootstrap";

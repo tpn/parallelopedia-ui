@@ -45,7 +45,7 @@ const GPT2 = () => {
 
     const encodedText = encodeURIComponent(inputText);
     const response = await fetch(
-      `http://dgx:4444/generate/${encodedText}?max_length=${maxLength}&seed=${seed}&device=${device}&model=${modelName}`,
+      `http://localhost:4444/generate/${encodedText}?max_length=${maxLength}&seed=${seed}&device=${device}&model=${modelName}`,
       {
         method: "GET",
       }
@@ -105,12 +105,12 @@ const GPT2 = () => {
 
   return (
     <>
-      <Container className="gpt2-container mt-3">
+      <Container className="llm-container mt-3">
         <Row className="mb-3">
           <Col>
             <FormControl
               type="text"
-              placeholder="Enter text"
+              placeholder="Enter text, e.g. &#34;Albert Einstein&#39;s Theory of Relativity stated that&#34;"
               value={inputText}
               onChange={handleInputChange}
             />
@@ -151,7 +151,12 @@ const GPT2 = () => {
           <div className="p-3 border rounded">
             <Form className="d-flex mb-3">
               <Form.Group className="d-flex align-items-center me-2">
-                <Form.Label className="me-2 mb-0">Max Length</Form.Label>
+                <Form.Label
+                  className="me-2 mb-0"
+                  style={{ whiteSpace: "nowrap" }}
+                >
+                  Max Length
+                </Form.Label>
                 <FormControl
                   type="number"
                   placeholder="Max Length"
@@ -182,7 +187,12 @@ const GPT2 = () => {
                 </Form.Select>
               </Form.Group>
               <Form.Group className="d-flex align-items-center me-2">
-                <Form.Label className="me-2 mb-0">Model Name</Form.Label>
+                <Form.Label
+                  className="me-2 mb-0"
+                  style={{ whiteSpace: "nowrap" }}
+                >
+                  Model Name
+                </Form.Label>
                 <Form.Select value={modelName} onChange={handleModelNameChange}>
                   <option value="gpt2">gpt2</option>
                   <option value="gpt2-xl">gpt2-xl</option>
