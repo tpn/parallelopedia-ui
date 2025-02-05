@@ -24,8 +24,8 @@ const App = () => {
               <Stats />
             </Tab>
           )}
-          <Tab title="LLM" eventKey="llm">
-            <LLM />
+          <Tab title="GPT2" eventKey="gpt2">
+            <GPT2 />
           </Tab>
         </Tabs>
       </main>
