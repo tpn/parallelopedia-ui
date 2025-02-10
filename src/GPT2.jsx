@@ -43,9 +43,14 @@ const GPT2 = () => {
     }));
     setResults(""); // Clear previous results
 
+    // If our hostname starts with "dgx", use "dgx" for the
+    // <hostname> part of the URL, otherwise use "localhost".
+    const currentHostname = window.location.hostname;
+    const hostname = currentHostname.startsWith("dgx") ? "dgx" : "localhost";
+
     const encodedText = encodeURIComponent(inputText);
     const response = await fetch(
-      `http://localhost:4444/generate/${encodedText}?max_length=${maxLength}&seed=${seed}&device=${device}&model=${modelName}`,
+      `http://${hostname}:4444/generate/${encodedText}?max_length=${maxLength}&seed=${seed}&device=${device}&model=${modelName}`,
       {
         method: "GET",
       }
@@ -179,6 +184,7 @@ const GPT2 = () => {
                 <Form.Label className="me-2 mb-0">Device</Form.Label>
                 <Form.Select value={device} onChange={handleDeviceChange}>
                   <option value="">Select a device</option>
+                  <option value="cuda">cuda</option>
                   <option value="cuda:0">cuda:0</option>
                   <option value="cuda:1">cuda:1</option>
                   <option value="cuda:2">cuda:2</option>
