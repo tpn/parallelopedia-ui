@@ -1,7 +1,7 @@
 const { spawn } = require('node-pty');
 const WebSocket = require('ws');
 
-const wss = new WebSocket.Server({ port: 8081 });
+const wss = new WebSocket.Server({ port: 9091 });
 
 wss.on('connection', (ws) => {
     const shell = spawn(process.env.SHELL || 'bash', [], {
@@ -28,4 +28,4 @@ wss.on('connection', (ws) => {
     });
 });
 
-console.log('WebSocket server running on ws://localhost:8081');
+console.log('WebSocket server running on ws://localhost:9091');

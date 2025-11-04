@@ -34,7 +34,12 @@ const BtopTab = () => {
     //xtermRef.current.write("Hello from xterm.js\r\n");
 
     // WebSocket connection
-    const ws = new WebSocket("ws://localhost:8080");
+    const protocol =
+      typeof window !== "undefined" && window.location.protocol === "https:"
+        ? "wss"
+        : "ws";
+    const host = typeof window !== "undefined" ? window.location.hostname : "localhost";
+    const ws = new WebSocket(`${protocol}://${host}:9090`);
     //ws.onopen = () => {
     //xtermRef.current.write("Connected to the local terminal\r\n");
     //};

@@ -3,7 +3,7 @@ const express = require('express');
 const WebSocket = require('ws');
 
 const app = express();
-const port = 8080;
+const port = 9090;
 
 // WebSocket clients
 const clients = new Set();

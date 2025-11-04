@@ -4,7 +4,12 @@ const BtopWebSocket = () => {
   const [output, setOutput] = useState("");
 
   useEffect(() => {
-    const ws = new WebSocket("ws://localhost:8080");
+    const protocol =
+      typeof window !== "undefined" && window.location.protocol === "https:"
+        ? "wss"
+        : "ws";
+    const host = typeof window !== "undefined" ? window.location.hostname : "localhost";
+    const ws = new WebSocket(`${protocol}://${host}:9090`);
 
     ws.onmessage = (event) => {
       //console.log("WebSocket message received:", event.data);
