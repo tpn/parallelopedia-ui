@@ -28,11 +28,18 @@ const GPT2 = () => {
   const [headers, setHeaders] = useState("");
 
   // Combine all related state into a single object
-  const [{ totalChars, charsPerSecond, startCharsTime }, setState] = useState({
+  const [{ charsPerSecond }, setState] = useState({
     totalChars: 0,
     charsPerSecond: 0,
     startCharsTime: null,
   });
+
+  // Build backend base URL from the current hostname, with fixed port 4444
+  const backendBaseUrl = `http://${
+    typeof window !== "undefined" ? window.location.hostname : "localhost"
+  }:4444`;
+
+  const gpt2Prefix = "/gpt2";
 
   const handleSubmit = async () => {
     setState((prevState) => ({
@@ -43,14 +50,9 @@ const GPT2 = () => {
     }));
     setResults(""); // Clear previous results
 
-    // If our hostname starts with "dgx", use "dgx" for the
-    // <hostname> part of the URL, otherwise use "localhost".
-    const currentHostname = window.location.hostname;
-    const hostname = currentHostname.startsWith("dgx") ? "dgx" : "localhost";
-
     const encodedText = encodeURIComponent(inputText);
     const response = await fetch(
-      `http://${hostname}:4444/generate/${encodedText}?max_length=${maxLength}&seed=${seed}&device=${device}&model=${modelName}`,
+      `${backendBaseUrl}${gpt2Prefix}/generate/${encodedText}?max_length=${maxLength}&seed=${seed}&device=${device}&model=${modelName}`,
       {
         method: "GET",
       }
@@ -58,6 +60,7 @@ const GPT2 = () => {
 
     const reader = response.body.getReader();
     const decoder = new TextDecoder("utf-8");
+    // Capture all headers, including any X-GPU-* headers
     const headersObj = {};
     response.headers.forEach((value, key) => {
       headersObj[key] = value;
@@ -217,7 +220,10 @@ const GPT2 = () => {
             {results || "Results will be displayed here."}
           </Card.Body>
           <Card.Footer className="text-muted">
-            {charsPerSecond.toFixed(2)} chars/s
+            {charsPerSecond.toFixed(2)} chars/s{" "}
+            {charsPerSecond < 3
+              ? "(< 1 tok/s)"
+              : `(~${Math.round(charsPerSecond / 3)} tok/s)`}
           </Card.Footer>
         </Card>
       </Container>

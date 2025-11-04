@@ -7,7 +7,6 @@ import {
   FormControl,
   ListGroup,
   Card,
-  FormCheck,
 } from "react-bootstrap";
 import { bytesToHuman } from "./Utils";
 
@@ -15,10 +14,17 @@ const Wiki = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [selectedXml, setSelectedXml] = useState(null);
-  const [format, setFormat] = useState("XML");
+  const [format] = useState("XML");
   const [shouldSearch, setShouldSearch] = useState(true);
   const [selectedHtml, setSelectedHtml] = useState(null);
   const [searchStatus, setSearchStatus] = useState("");
+
+  // Build backend base URL from the current hostname, with fixed port 4444
+  const backendBaseUrl = `http://${
+    typeof window !== "undefined" ? window.location.hostname : "localhost"
+  }:4444`;
+
+  const wikiPrefix = "/wiki";
 
   // Debounce search function and abort controller for cancelling requests
   const abortControllerRef = useRef(null);
@@ -47,10 +53,13 @@ const Wiki = () => {
 
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://dgx:4444/offsets/${query}`, {
+        const response = await fetch(
+          `${backendBaseUrl}${wikiPrefix}/offsets/${encodeURIComponent(query)}`,
+          {
           mode: "cors",
           signal,
-        });
+          }
+        );
         const data = await response.json();
         setResults(data);
         const endTime = performance.now();
@@ -69,14 +78,16 @@ const Wiki = () => {
     const timeoutId = setTimeout(fetchData, 1000);
 
     return () => clearTimeout(timeoutId);
-  }, [query]);
+  }, [query, shouldSearch, backendBaseUrl]);
 
   // Handle item click and fetch data based on selected format
   const handleResultClick = async (name, startByte, endByte) => {
     const startTime = performance.now();
     try {
       const url =
-        format === "XML" ? "http://dgx:4444/xml" : "http://dgx:4444/html";
+        format === "XML"
+          ? `${backendBaseUrl}${wikiPrefix}/xml`
+          : `${backendBaseUrl}${wikiPrefix}/html`;
       const response = await fetch(url, {
         headers: {
           Range: `bytes=${startByte}-${endByte}`,
