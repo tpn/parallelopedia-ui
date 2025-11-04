@@ -4,6 +4,8 @@ import Container from "react-bootstrap/Container";
 import Wiki from "./Wiki";
 import GPT2 from "./GPT2";
 import LLM from "./LLM";
+import BtopTab from "./BtopTab";
+import TerminalTab from "./TerminalTab";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.scss";
 import "./App.css";
@@ -14,7 +16,7 @@ import Form from "react-bootstrap/Form";
 
 const App = () => {
   const [showSettings, setShowSettings] = useState(false);
-  const [visibleApps, setVisibleApps] = useState({ wiki: true, gpt2: true, llm: true });
+  const [visibleApps, setVisibleApps] = useState({ wiki: true, gpt2: true, llm: true, btop: false, terminal: false });
   const [activeKey, setActiveKey] = useState("wiki");
 
   const availableApps = useMemo(
@@ -22,9 +24,13 @@ const App = () => {
       { id: "wiki", label: "Wiki" },
       { id: "gpt2", label: "GPT2" },
       { id: "llm", label: "LLM" },
+      { id: "btop", label: "Btop" },
+      { id: "terminal", label: "Terminal" },
     ],
     []
   );
+
+  const tabOrder = useMemo(() => ["wiki", "gpt2", "llm", "btop", "terminal"], []);
 
   const accelerators = useMemo(() => {
     const used = new Set();
@@ -66,12 +72,12 @@ const App = () => {
 
   useEffect(() => {
     if (!visibleApps[activeKey]) {
-      const nextKey = ["wiki", "gpt2", "llm"].find((k) => visibleApps[k]);
+      const nextKey = tabOrder.find((k) => visibleApps[k]);
       if (nextKey) {
         setActiveKey(nextKey);
       }
     }
-  }, [visibleApps, activeKey]);
+  }, [visibleApps, activeKey, tabOrder]);
 
   useEffect(() => {
     const onKeyDown = (e) => {
@@ -133,7 +139,7 @@ const App = () => {
         </button>
       </header>
       <main className="mt-3">
-        <Tabs activeKey={activeKey} onSelect={(k) => k && setActiveKey(k)} id="main-tabs">
+        <Tabs activeKey={activeKey} onSelect={(k) => k && setActiveKey(k)} id="main-tabs" mountOnEnter unmountOnExit>
           {visibleApps.wiki && (
             <Tab title="Wiki" eventKey="wiki">
               <Wiki />
@@ -152,6 +158,16 @@ const App = () => {
           {visibleApps.llm && (
             <Tab title="LLM" eventKey="llm">
               <LLM />
+            </Tab>
+          )}
+          {visibleApps.btop && (
+            <Tab title="Btop" eventKey="btop">
+              <BtopTab />
+            </Tab>
+          )}
+          {visibleApps.terminal && (
+            <Tab title="Terminal" eventKey="terminal">
+              <TerminalTab />
             </Tab>
           )}
         </Tabs>
@@ -197,6 +213,30 @@ const App = () => {
               )}
               checked={visibleApps.llm}
               onChange={(e) => setVisibleApps((v) => ({ ...v, llm: e.target.checked }))}
+            />
+            <Form.Check
+              className="mt-2"
+              type="checkbox"
+              id="toggle-btop"
+              label={renderWithUnderline(
+                "Btop",
+                accelerators.btop?.index ?? 0,
+                accelerators.btop?.key
+              )}
+              checked={visibleApps.btop}
+              onChange={(e) => setVisibleApps((v) => ({ ...v, btop: e.target.checked }))}
+            />
+            <Form.Check
+              className="mt-2"
+              type="checkbox"
+              id="toggle-terminal"
+              label={renderWithUnderline(
+                "Terminal",
+                accelerators.terminal?.index ?? 0,
+                accelerators.terminal?.key
+              )}
+              checked={visibleApps.terminal}
+              onChange={(e) => setVisibleApps((v) => ({ ...v, terminal: e.target.checked }))}
             />
           </Form>
         </Modal.Body>

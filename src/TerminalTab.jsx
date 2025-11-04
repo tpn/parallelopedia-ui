@@ -24,8 +24,25 @@ const TerminalTab = () => {
     // Open the terminal in the div
     xtermRef.current.open(terminalRef.current);
 
-    // Dynamically adjust the terminal size to fit its container
-    fitAddon.current.fit();
+    const fitSafely = () => {
+      if (fitAddon.current) {
+        try {
+          fitAddon.current.fit();
+        } catch (e) {
+          // swallow transient fit timing errors; we'll retry on observers
+        }
+      }
+    };
+
+    // Fit after next paint and when fonts are ready
+    if (typeof window !== "undefined" && window.requestAnimationFrame) {
+      window.requestAnimationFrame(() => fitSafely());
+    } else {
+      setTimeout(fitSafely, 0);
+    }
+    if (document && document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => fitSafely());
+    }
 
     // Write an initial message
     //xtermRef.current.write("Hello from xterm.js\r\n");
@@ -49,19 +66,22 @@ const TerminalTab = () => {
       ws.send(data); // Send user input to the backend shell
     });
 
-    // Handle window resize
-    const handleResize = () => {
-      if (fitAddon.current) {
-        fitAddon.current.fit();
-      }
-    };
-
+    // Handle window resize and container resize
+    const handleResize = () => fitSafely();
     window.addEventListener("resize", handleResize);
+    let ro = null;
+    if (typeof ResizeObserver !== "undefined" && terminalRef.current) {
+      ro = new ResizeObserver(() => fitSafely());
+      ro.observe(terminalRef.current);
+    }
 
     return () => {
       xtermRef.current.dispose();
       ws.close();
       window.removeEventListener("resize", handleResize);
+      if (ro) {
+        try { ro.disconnect(); } catch (e) {}
+      }
     };
   }, []);
 
