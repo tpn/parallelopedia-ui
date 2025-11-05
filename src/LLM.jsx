@@ -11,6 +11,7 @@ import {
 
 const LLM = () => {
   const [inputText, setInputText] = useState("");
+  const [systemText, setSystemText] = useState("");
 
   // Advanced options
   const [maxLength, setMaxLength] = useState("");
@@ -19,6 +20,7 @@ const LLM = () => {
   const [device, setDevice] = useState("");
   const [modelName, setModelName] = useState("qwen3-4b");
   const [chatMode, setChatMode] = useState(false);
+  const [showThinking, setShowThinking] = useState(true);
 
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
   const [showHeaders, setShowHeaders] = useState(false);
@@ -52,6 +54,7 @@ const LLM = () => {
       startCharsTime: null,
     }));
     setResults("");
+    let collected = "";
 
     const encodedText = encodeURIComponent(inputText);
 
@@ -62,6 +65,7 @@ const LLM = () => {
     if (device !== "") params.set("device", device);
     if (modelName !== "") params.set("model", modelName);
     if (chatMode) params.set("chat", "1");
+    if (chatMode && systemText.trim() !== "") params.set("system", systemText);
 
     const url = `${backendBaseUrl}${llmPrefix}/generate/${encodedText}?${params.toString()}`;
 
@@ -100,32 +104,81 @@ const LLM = () => {
         };
       });
 
+      collected += chunk;
       setResults((prevResults) => prevResults + chunk);
+    }
+
+    // After complete stream, optionally strip thinking blocks
+    if (!showThinking) {
+      const withoutThinking = collected.replace(/<think>[\s\S]*?<\/think>/g, "");
+      setResults(withoutThinking);
     }
   };
 
   return (
     <>
       <Container className="llm-container mt-3">
-        <Row className="mb-3">
-          <Col>
-            <FormControl
-              type="text"
-              placeholder='Enter text, e.g. "The quick brown fox jumps over"'
-              value={inputText}
-              onChange={handleInputChange}
-            />
-          </Col>
-          <Col xs="auto">
-            <Button
-              variant="primary"
-              onClick={handleSubmit}
-              disabled={!inputText.trim()}
-            >
-              Submit
-            </Button>
-          </Col>
-        </Row>
+        {!chatMode && (
+          <Row className="mb-3">
+            <Col>
+              <FormControl
+                type="text"
+                placeholder='Enter text, e.g. "The quick brown fox jumps over"'
+                value={inputText}
+                onChange={handleInputChange}
+              />
+            </Col>
+            <Col xs="auto">
+              <Button
+                variant="primary"
+                onClick={handleSubmit}
+                disabled={!inputText.trim()}
+              >
+                Submit
+              </Button>
+            </Col>
+          </Row>
+        )}
+
+        {chatMode && (
+          <>
+            <Row className="mb-2">
+              <Col>
+                <Form.Label className="mb-1">System Prompt</Form.Label>
+                <FormControl
+                  as="textarea"
+                  rows={3}
+                  placeholder="Optional system instructions for the assistant"
+                  value={systemText}
+                  onChange={(e) => setSystemText(e.target.value)}
+                />
+              </Col>
+            </Row>
+            <Row className="mb-3">
+              <Col>
+                <Form.Label className="mb-1">User Prompt</Form.Label>
+                <FormControl
+                  as="textarea"
+                  rows={6}
+                  placeholder="Enter user prompt/content"
+                  value={inputText}
+                  onChange={handleInputChange}
+                />
+              </Col>
+            </Row>
+            <Row className="mb-3">
+              <Col xs="auto">
+                <Button
+                  variant="primary"
+                  onClick={handleSubmit}
+                  disabled={!inputText.trim()}
+                >
+                  Submit
+                </Button>
+              </Col>
+            </Row>
+          </>
+        )}
         <Row className="mb-3">
           <Col>
             <Form.Check
@@ -220,6 +273,30 @@ const LLM = () => {
                   label="Chat Template"
                   checked={chatMode}
                   onChange={() => setChatMode(!chatMode)}
+                />
+              </Form.Group>
+            </Form>
+            <Form className="d-flex flex-wrap mb-2">
+              <Form.Group className="d-flex align-items-center me-3 mb-2">
+                <Form.Label className="me-2 mb-0" style={{ whiteSpace: "nowrap" }}>
+                  Show Thinking
+                </Form.Label>
+                <Form.Check
+                  type="radio"
+                  id="show-thinking-yes"
+                  name="show-thinking"
+                  label="Yes"
+                  className="me-3"
+                  checked={showThinking === true}
+                  onChange={() => setShowThinking(true)}
+                />
+                <Form.Check
+                  type="radio"
+                  id="show-thinking-no"
+                  name="show-thinking"
+                  label="No"
+                  checked={showThinking === false}
+                  onChange={() => setShowThinking(false)}
                 />
               </Form.Group>
             </Form>
